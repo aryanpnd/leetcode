@@ -8,7 +8,7 @@ class Solution {
         int R = m.length;
         int c = 0;
         int C = m[0].length;
-        List<Integer> a = new ArrayList()<>();
+        List<Integer> a = new ArrayList<Integer>();
         
         while(R>r && C>c){
 
