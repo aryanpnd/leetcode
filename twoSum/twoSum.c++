@@ -1,3 +1,4 @@
+// brute force approach
 #include <vector>
 
 class Solution {
