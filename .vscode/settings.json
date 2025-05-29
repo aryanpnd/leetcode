@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "*.txt": "plaintext",
-        "vector": "cpp",
-        "xstring": "cpp"
-    }
-}
