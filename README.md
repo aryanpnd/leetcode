@@ -37,6 +37,9 @@ Track your progress with the built-in statistics tool.
 # Show all statistics
 ./stats.exe
 
+# Help menu
+./stats.exe help
+
 # Language breakdown
 ./stats.exe languages
 
@@ -50,6 +53,7 @@ Track your progress with the built-in statistics tool.
 - `count` - Total question count
 - `list` - List all questions
 - `export` - Export to JSON
+- `help` - Show help menu
 
 ### Sample Output
 ```
