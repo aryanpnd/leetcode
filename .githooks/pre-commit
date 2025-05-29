@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# ┌─────────────────────────────────────────────────────────────┐
+# │ 🧠 Git Pre-commit Hook: Auto-Organize LeetCode Solutions     │
+# └─────────────────────────────────────────────────────────────┘
+# This hook automatically organizes LeetCode problem files before each commit.
+# 
+# ✅ What it does:
+# - Scans newly added files staged for commit (via `git add`).
+# - Matches files like: questions/1838.frequency-of-the-most-frequent-element.go
+# - For each match:
+#     - Creates a folder: questions/1838.frequency-of-the-most-frequent-element/
+#     - Moves the file into that folder as: solution.<ext> (e.g., solution.go)
+#     - Updates Git staging to reflect the new path.
+# 
+# 🎯 Purpose:
+# Keeps your `questions/` folder clean and structured — one folder per problem,
+# no matter how many languages you've solved it in.
+#
+# 📁 Example:
+# Before:
+#   questions/
+#     1838.frequency-of-the-most-frequent-element.go
+#     1838.frequency-of-the-most-frequent-element.java
+#
+# After commit:
+#   questions/
+#     1838.frequency-of-the-most-frequent-element/
+#       solution.go
+#       solution.java
+
+echo "🔍 Checking for LeetCode files in questions/ to organize..."
+
+# All newly added files
+files_to_add=$(git diff --cached --name-only --diff-filter=A)
+
+organized_any=false
+
+for file in $files_to_add; do
+    # Match only files directly under questions/, e.g. questions/1234.two-sum.go
+    if [[ $file =~ ^questions/([0-9]+\.[a-z0-9-]+)\.(go|js|py|java|cpp|c)$ ]]; then
+        base="${BASH_REMATCH[1]}"      # e.g. "1838.frequency-of-the-most-frequent-element"
+        ext="${BASH_REMATCH[2]}"       # e.g. "go" or "java"
+        folder="questions/$base"       # e.g. "questions/1838.frequency-of-the-most-frequent-element"
+        
+        echo "📁 Organizing: $file → $folder/solution.$ext"
+        
+        # Create folder if it doesn't exist (no-op if it does)
+        mkdir -p "$folder"
+        
+        # Move & rename into place
+        mv "$file" "$folder/solution.$ext"
+        
+        # Update Git staging: unstage old, stage new
+        git reset HEAD "$file" 2>/dev/null
+        git add "$folder/solution.$ext"
+        
+        organized_any=true
+    fi
+done
+
+if [ "$organized_any" = true ]; then
+    echo "✅ Files organized! Proceeding with commit..."
+else
+    echo  "No LeetCode files to organize."
+fi
+
+exit 0
