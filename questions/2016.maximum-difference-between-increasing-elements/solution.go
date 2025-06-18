@@ -27,5 +27,27 @@
 // 	return n2
 // }
 
+// optimized
+func maximumDifference(nums []int) int {
+	min, n, ans := nums[0], len(nums), -1
+
+	for i := 1; i < n; i++ {
+		if min < nums[i] {
+			ans = max(ans, nums[i]-min)
+		} else {
+			min = nums[i]
+		}
+	}
+
+	return ans
+}
+
+func max(n1, n2 int) int {
+	if n1 > n2 {
+		return n1
+	}
+	return n2
+}
+
 // @lc code=end
 
